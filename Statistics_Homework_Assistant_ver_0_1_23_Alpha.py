@@ -32,7 +32,7 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 
 
 
-	print('Statistic Homework Assistant Ver. 0.1.23.Alpha, Copyright © 2025 Zhang Yiwei')
+	print('Statistic Homework Assistant Ver. 0.1.24.Alpha, Copyright © 2025 Zhang Yiwei')
 
 	time.sleep(0.5)
 
@@ -548,7 +548,7 @@ def normal_dis_num(mean_dis, std_dis, size_dis): #正态分布函数，输入参
 
 
 def multi_histo_plotting(data): #多数据直方图函数，输入参数为数据总集（两层嵌套列表，二级列表元素为浮点），无返回值
-	print('Histogram mode')
+	print('Multi-Histogram mode')
 
 	data_needed = []
 
@@ -675,36 +675,11 @@ def cum_rel_frequency_g(data): #堆积百分比图，输入参数为数据总集
 			break
 
 
-
-
 	data_needed = sorted(data[data_index_working])
 
 
-	data_percentile = []
-	x_axis = []
+	plt.ecdf(data_needed)
 
-	for index_of_data in range(len(data_needed) - 1):
-
-		if data_needed[index_of_data] != data_needed[index_of_data + 1] and data_needed[index_of_data] != data_needed[-1]:
-
-			data_percentile_single = (index_of_data + 1) / len(data_needed)
-			data_percentile.append(data_percentile_single * 100)
-
-			x_axis.append(data_needed[index_of_data])
-
-		else:
-
-			pass
-
-	data_percentile_single = 1
-	data_percentile.append(data_percentile_single * 100)
-
-	x_axis.append(data_needed[-1])
-
-
-
-
-	plt.plot(x_axis, data_percentile)
 
 
 	title = input('Please type in the title of the graph: ')
@@ -720,7 +695,7 @@ def cum_rel_frequency_g(data): #堆积百分比图，输入参数为数据总集
 
 	plt.title(title)
 	plt.xlabel(x_label)
-	plt.ylabel(y_label + '(%)')
+	plt.ylabel(y_label)
 	plt.grid()
 	plt.show()
 
@@ -997,41 +972,7 @@ def binomial_dis_num(): #二项分布函数，输入参数为试验次数（整�
 	list_bino = []
 
 
-	while True:
-
-		n = ask_number('Please input the number of independent experiment in a set(n): ')
-
-		if n <= 0:
-			print('Input out of range! Please try again! Available range: (0-infinity)')
-
-		else:
-
-			break
-
-	while True:
-
-		p = ask_number('Please input the probability of succeed(p): ', float_check=True)
-
-		test_res = test_range(p, 1, 0, 'Input out of range! Please try again! Available range: [0-1]', True, True)
-
-
-		if test_res:
-			break
-
-		else:
-
-			pass
-
-	while True:
-
-		size_dis = ask_number('Please input the number of experiments sets: ')
-
-		if size_dis <= 0:
-			print('Input out of range! Please try again! Available range: (0-infinity)')
-
-		else:
-
-			break
+	n, p, size_dis = distri_ask_paras()
 
 
 	bino_list = np.random.binomial(n=n, p=p, size=size_dis)
@@ -1047,7 +988,6 @@ def binomial_dis_num(): #二项分布函数，输入参数为试验次数（整�
 
 
 	return string
-
 
 
 
@@ -1234,14 +1174,14 @@ def advance_para_calc(data, mean, total_std): #计算高级统计学参数，输
 
 def poisson_dis(lam, size_dis):
 
-	list_nrm = []
+	pois_nrm = []
 
 	poi_list = np.random.poisson(lam, size_dis)
 
-	for normal_index in range(size_dis):
-		list_nrm.append(str(poi_list[normal_index]))
+	for pois_index in range(size_dis):
+		pois_nrm.append(str(poi_list[pois_index]))
 
-	string = ' '.join(list_nrm)
+	string = ' '.join(pois_nrm)
 
 	return string
 
@@ -1250,11 +1190,11 @@ def poisson_dis(lam, size_dis):
 def random_generator():
 	while True:
 
-		print('Generate a Random distribution(R) , a Normal distribution(N), a Binomial distribution(B), or a Poisson distribution(P)?')
+		print('Generate a Random distribution(R) , a Normal distribution(N), a Bernoulli distribution(BERN), a Binomial distribution(BINO), or a Poisson distribution(P)?')
 
-		ans = input()
+		ans = input().upper()
 
-		if ans == 'R' or ans == 'r':
+		if ans == 'R':
 
 			start_val = ask_number('Please enter the start value: ')
 
@@ -1267,7 +1207,7 @@ def random_generator():
 			break
 
 
-		elif ans == 'N' or ans == 'n':
+		elif ans == 'N':
 
 			mean_val = ask_number('Please enter the mean of the distribution: ')
 
@@ -1278,14 +1218,14 @@ def random_generator():
 			out_string = normal_dis_num(mean_val, std_val, num_val)
 			break
 
-		elif ans == 'B' or ans == 'b':
+		elif ans == 'B':
 
 			out_string = binomial_dis_num()
 
 			break
 
 
-		elif ans == 'P' or ans == 'p':
+		elif ans == 'P':
 
 			lambda_pmt = ask_number('Please enter the parameter(lambda) of the distribution: ')
 
@@ -1294,13 +1234,78 @@ def random_generator():
 			out_string = poisson_dis(lambda_pmt, size)
 			break
 
+		elif ans == 'BERN':
+
+			out_string = bern_dis_num()
+
+			break
 
 		else:
 			print('Invalid input, please try again.')
 
-
-
 	return out_string
+
+
+
+def bern_dis_num():
+	bern_nrm = []
+
+	n, prob, size_dis = distri_ask_paras(n_need = False)
+
+	bern_list = np.random.binomial(n = n, p = prob, size = size_dis)
+
+	for pois_index in range(size_dis):
+		bern_nrm.append(str(bern_list[pois_index]))
+
+	string = ' '.join(bern_nrm)
+
+	return string
+
+
+def distri_ask_paras(n_need = True):
+
+	if n_need:
+
+		while True:
+
+			n = ask_number('Please input the number of independent experiment in a set(n): ')
+
+			if n <= 0:
+				print('Input out of range! Please try again! Available range: (0-infinity)')
+
+			else:
+
+				break
+
+	else:
+
+		n = 1
+
+	while True:
+
+		p = ask_number('Please input the probability of succeed(p): ', float_check=True)
+
+		test_res = test_range(p, 1, 0, 'Input out of range! Please try again! Available range: [0-1]', True, True)
+
+
+		if test_res:
+			break
+
+		else:
+
+			pass
+
+	while True:
+
+		size_dis = ask_number('Please input the number of experiments sets: ')
+
+		if size_dis <= 0:
+			print('Input out of range! Please try again! Available range: (0-infinity)')
+
+		else:
+
+			return n, p, size_dis
+
 
 def json_saving(data_original):
 
@@ -1422,7 +1427,7 @@ def change_data(universal_set):
 			break
 
 	universal_set[data_change_index] = dataset_input()
-	print('Succeed')
+	print('Succeed!')
 	return universal_set
 
 
@@ -1497,7 +1502,7 @@ def del_dataset(universal_set):
 				break
 		del universal_set[data_change_index]
 
-		print('Succeed')
+		print('Succeed!')
 
 		return universal_set
 
@@ -1562,41 +1567,10 @@ def prob_coin(universal_data):
 
 		print_res = ''
 
-		while True:
+		times = prob_ask_times('tossing coins')
 
-			times_str = input('You can enter "+" to toss a coin, enter times of toss coins or enter "#" to exit: ')
-
-			try:
-
-				times = int(times_str)
-
-				break
-
-			except ValueError:
-
-				if times_str == '+':
-
-					times = 1
-
-					break
-
-				elif times_str == '#':
-
-					times = 0
-
-					break
-
-				else:
-
-					print('Invalid input!')
-
-		if times_str == '#':
-
-			universal_data.append(result_coin)
-
-			print('Result has been saved at index: ' + str(universal_data.index(result_coin)))
-
-			return universal_data
+		if not times:
+			return prob_result_out(result_coin, universal_data)
 
 
 		for index_tossing in range(times):
@@ -1617,15 +1591,20 @@ def prob_coin(universal_data):
 
 		print('Result(T is tail, H is head)\n' + print_res)
 
+
 def main_prob(universal_data):
 
-	type_prob = input('Which problem do you want to simulate: \nTossing coins(TC)\n').upper()
+	type_prob = input('Which problem do you want to simulate: \nTossing coins(TC), Rolling dice(RD)\n').upper()
 
 	match type_prob:
 
 		case 'TC':
 
 			result_prob = prob_coin(universal_data)
+
+		case 'RD':
+
+			result_prob = prob_dice(universal_data)
 
 		case _:
 
@@ -1634,6 +1613,197 @@ def main_prob(universal_data):
 			print('Invalid input!')
 
 	return result_prob
+
+
+
+
+def prob_dice(universal_data):
+	print('Rolling dice')
+
+	result_dice = []
+
+	while True:
+
+
+		times = prob_ask_times('rolling dice')
+
+
+		if not times:
+			return prob_result_out(result_dice, universal_data)
+
+		for index_tossing in range(times):
+			result_sig = random.randint(1,6)
+			result_dice.append(result_sig)
+
+		print('Result: \n' + str(result_dice))
+
+
+
+
+
+
+def prob_ask_times(name_program):
+	while True:
+
+		times_str = input('You can enter "+" for ' + name_program + ', enter times of ' + name_program + ' or enter "#" to exit: ')
+
+		try:
+
+			times = int(times_str)
+
+			return times
+
+		except ValueError:
+
+			if times_str == '+':
+
+				times = 1
+
+				return times
+
+			elif times_str == '#':
+
+				return False
+
+			else:
+
+				print('Invalid input!')
+
+
+
+
+def prob_result_out(prob_result, universal_data):
+	universal_data.append(prob_result)
+
+	print('Result has been saved at index: ' + str(universal_data.index(prob_result)))
+
+	return universal_data
+
+
+
+
+def line_plot(x, y):
+
+	if len(x) != len(y):
+
+		raise ValueError
+
+	else:
+
+		label = input('Please enter a label for this group: \n')
+
+		plt.plot(x, y, label = label)
+
+
+
+
+def main_line_graph(universal_set):
+	print('Line graph mode')
+
+	while True:
+		while True:
+
+			while True:
+				x_index = input('Please enter the index of independent dataset, or enter "#" to exit: ')
+
+				if x_index == '#':
+					x_index = True
+
+					break
+
+				try:
+					x_index = int(x_index)
+
+				except ValueError:
+
+					print('Invalid input!')
+
+				else:
+
+					break
+
+			if x_index:
+
+				x_data = None
+
+				break
+
+			try:
+
+				x_data = universal_set[x_index]
+
+			except IndexError:
+
+				print('Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')')
+
+			else:
+
+				break
+
+		if x_index:
+
+			break
+
+
+		while True:
+
+			while True:
+
+				y_index = input('Please enter the index of dependent dataset: ')
+
+				try:
+					y_index = int(y_index)
+
+				except ValueError:
+
+					print('Invalid input!')
+
+				else:
+
+					break
+
+			try:
+
+				y_data = universal_set[y_index]
+
+			except IndexError:
+
+				print('Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')')
+
+			else:
+
+				break
+
+		try:
+
+			line_plot(x_data,y_data)
+
+
+		except ValueError:
+
+			print('Error!')
+
+
+
+	title = input('Please type in the title of the line graph: ')
+
+	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
+
+	x_label = default_label(x_label, 'Observation')
+
+	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
+
+	y_label = default_label(y_label, 'Frequency')
+
+	plt.title(title)
+	plt.xlabel(x_label)
+	plt.ylabel(y_label)
+	plt.grid()
+	plt.legend()
+
+	plt.show()
+
+	print('Succeed!')
 
 
 
@@ -1657,7 +1827,7 @@ def main():
 
 
 
-		print('Do you want: \nCalculate parameters(P)\nBivariate Chart: a Scatter plot(S), a Multi-data histogram(M), a Box-plot(B) \nUnivariate: Chart a Dot plot(D), a scatter plot(Frequency)(F), Histogram(H), a Cumulative relative frequency graph(C), or a density curve(DC)? \nOr you can enter "ADD" to add a dataset, "DATA" to view a dataset,"MOD" to modify dataset,"DEL" to delete a dataset or "SAV" to save a dataset.\nEnter "Prob" to enable probability simulator\nEnter "#" to exit.')
+		print('Do you want: \nCalculate parameters(P)\nBivariate Chart: a Scatter plot(S), a Multi-data histogram(M), a Box-plot(B), a Line graph(L)\nUnivariate: Chart a Dot plot(D), a scatter plot(Frequency)(F), Histogram(H), a Cumulative relative frequency graph(C), or a density curve(DC)? \nOr you can enter "ADD" to add a dataset, "DATA" to view a dataset,"MOD" to modify dataset,"DEL" to delete a dataset or "SAV" to save a dataset.\nEnter "Prob" to enable probability simulator\nEnter "#" to exit.')
 
 		type_of_chart = input().upper()
 
@@ -1734,6 +1904,11 @@ def main():
 		elif type_of_chart == 'PROB':
 
 			original_data = main_prob(original_data)
+
+
+		elif type_of_chart == 'L':
+
+			main_line_graph(original_data)
 
 
 		elif type_of_chart == '#': #触发退出
