@@ -32,7 +32,7 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 
 
 
-	print('Statistic Homework Assistant Ver. 0.1.24.Alpha, Copyright © 2025 Zhang Yiwei')
+	print('Statistic Homework Assistant Ver. 0.1.25.Alpha, Copyright © 2025 Zhang Yiwei')
 
 	time.sleep(0.5)
 
@@ -62,6 +62,41 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 
 
 
+def exit_func(): #退出动画，无输入参数和返回值
+	print('\033[1;32mThanks for using Statistics Homework Assistant!')
+	print('Copyright © 2025 Zhang Yiwei')
+	print('If you are satisfied with the experience of using this program, ')
+	print('you are welcome to support me on my personal social media account.')
+	print('Your support is the motivation for me to continue developing programs.')
+
+	print("Do you want to be redirected to my social media account? (y/n)\033[0m")
+
+
+	last = input()
+
+	if last == 'y' or last == 'Y':
+		print('\033[1;32mThank you for your supporting very much!')
+
+		print('Redirecting', end = '')
+
+		for i in range(6):
+			time.sleep(0.5)
+			print('.', end='')
+
+		print('Succeed!\033[0m')
+
+
+		webbrowser.open("https://space.bilibili.com/1505913565?spm_id_from=333.1007.0.0")
+
+
+
+
+
+	else:
+		print('\033[1;32mThanks for using! Wish you a good day!\033[0m')
+
+
+	sys.exit()
 
 
 
@@ -257,7 +292,7 @@ def box_plotting(data): #生成箱线图的函数，输入参数为一个元素�
 
 
 			if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-				print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(len(data) - 1) + ')')
+				print(error_index_range(data))
 
 			else:
 
@@ -309,51 +344,6 @@ def box_plotting(data): #生成箱线图的函数，输入参数为一个元素�
 	plt.show()
 
 	print('Succeed!')
-
-
-
-def exit_func(): #退出动画，无输入参数和返回值
-	print('\033[1;32mThanks for using Statistics Homework Assistant!')
-	print('Copyright © 2025 Zhang Yiwei')
-	print('If you are satisfied with the experience of using this program, ')
-	print('you are welcome to support me on my personal social media account.')
-	print('Your support is the motivation for me to continue developing programs.')
-
-	print("Do you want to be redirected to my social media account? (y/n)\033[0m")
-
-
-	last = input()
-
-	if last == 'y' or last == 'Y':
-		print('\033[1;32mThank you for your supporting very much!')
-
-		print('Redirecting', end = '')
-
-		for i in range(6):
-			time.sleep(0.5)
-			print('.', end='')
-
-		print('Succeed!\033[0m')
-
-
-		webbrowser.open("https://space.bilibili.com/1505913565?spm_id_from=333.1007.0.0")
-
-
-
-
-
-	else:
-		print('\033[1;32mThanks for using! Wish you a good day!\033[0m')
-
-
-
-	sys.exit()
-
-
-
-
-
-
 
 
 
@@ -576,7 +566,7 @@ def multi_histo_plotting(data): #多数据直方图函数，输入参数为数�
 
 
 			if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-				print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(len(data) - 1) + ')')
+				print(error_index_range(data))
 
 			else:
 
@@ -602,7 +592,7 @@ def multi_histo_plotting(data): #多数据直方图函数，输入参数为数�
 
 		if bin_num_str == '':
 
-			bin_num_str = str( int(1 + np.log10(len(data[0])) / np.log10(2)))
+			bin_num_str = str( int(1 + np.log10(len(data[data_index[random.randint(0, len(data_index) - 1)]])) / np.log10(2)))
 		try:
 			bin_number = int(bin_num_str)
 
@@ -668,7 +658,7 @@ def cum_rel_frequency_g(data): #堆积百分比图，输入参数为数据总集
 
 
 		if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-			print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(len(data) - 1) + ')')
+			print(error_index_range(data))
 
 		else:
 
@@ -713,8 +703,7 @@ def dot(data): #点状图，输入参数为数据总集（两层嵌套列表，�
 
 
 		if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-			print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(
-				len(data) - 1) + ')')
+			print(error_index_range(data))
 
 		else:
 
@@ -772,8 +761,7 @@ def fre_sct(data):  # 频率散点图，输入参数为数据总集（两层嵌�
 		data_index_working = ask_number('Which data set would you like to plot?')
 
 		if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-			print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(
-				len(data) - 1) + ')')
+			print(error_index_range(data))
 
 		else:
 
@@ -854,8 +842,7 @@ def scatter_plt(data): #散点图，输入参数为数据总集（两层嵌套�
 			data_index_working = ask_number('Which data set would you like to plot as x-axis?')
 
 			if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-				print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(
-					len(data) - 1) + ')')
+				print(error_index_range(data))
 
 			else:
 				x_axis = data[data_index_working]
@@ -866,8 +853,7 @@ def scatter_plt(data): #散点图，输入参数为数据总集（两层嵌套�
 			data_index_working = ask_number('Which data set would you like to plot as y-axis?')
 
 			if data_index_working >= len(data) or data_index_working < (0 - len(data)):
-				print('Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(
-					len(data) - 1) + ')')
+				print(error_index_range(data))
 
 			else:
 				y_axis = data[data_index_working]
@@ -1087,14 +1073,13 @@ def linear_reg(x_data,y_data): #线性拟合，输入为两个列表，元素为
 
 
 
-def dst_plt(data):  #画密度曲线的函数，输入参数为数据总集，无1返回值
+def dst_plt(data):  #画密度曲线的函数，输入参数为数据总集，无返回值
 
 	while True:
 
 		index_dst = ask_number('Which data set would you like to plot?')
 
-		if test_range(index_dst, len(data), 0 - len(data), 'Index out of range! Please try again! Available range: (' + str(0 - len(data)) + ' to ' + str(
-				len(data) - 1) + ')', True, True):
+		if test_range(index_dst, len(data), 0 - len(data), error_index_range(data), True, True):
 
 			data_needed = data[index_dst]
 
@@ -1354,7 +1339,7 @@ def select_dataset(universal_set):
 
 		index_dst = ask_number('Which data set would you save')
 
-		if test_range(index_dst, len(universal_set), 0 - len(universal_set), 'Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')', True, True):
+		if test_range(index_dst, len(universal_set), 0 - len(universal_set), error_index_range(universal_set), True, True):
 			data_needed = universal_set[index_dst]
 
 			break
@@ -1381,7 +1366,7 @@ def view_data(datasets):
 
 		except IndexError:
 
-			print('Index out of range! Please try again! Available range: (' + str(0 - len(datasets)) + ' to ' + str(len(datasets) - 1) + ')')
+			print(error_index_range(datasets))
 
 			break
 
@@ -1422,7 +1407,7 @@ def change_data(universal_set):
 
 				break
 
-		if test_range(data_change_index, len(universal_set), 0 - len(universal_set), 'Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')', True, True):
+		if test_range(data_change_index, len(universal_set), 0 - len(universal_set), error_index_range(universal_set), True, True):
 
 			break
 
@@ -1498,7 +1483,7 @@ def del_dataset(universal_set):
 
 					break
 
-			if test_range(data_change_index, len(universal_set), 0 - len(universal_set),'Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')', True, True):
+			if test_range(data_change_index, len(universal_set), 0 - len(universal_set),error_index_range(universal_set), True, True):
 				break
 		del universal_set[data_change_index]
 
@@ -1518,7 +1503,7 @@ def main_calc_para(universal_data):
 
 
 		except IndexError:
-			print('Index out of range! Please try again! Available range: (' + str(0 - len(universal_data)) + ' to ' + str(len(universal_data) - 1) + ')') #防止索引超限，如果超限，提醒并重新输入
+			print(error_index_range(universal_data)) #防止索引超限，如果超限，提醒并重新输入
 
 		else:
 
@@ -1545,7 +1530,7 @@ def main_single_histo_plotting(original_data):
 		index_histo = ask_number('Which data set would you like to plot?')  # 直方图函数须先确定画哪个数据集
 
 		if index_histo >= len(original_data) or index_histo < (0 - len(original_data)):
-			print('Index out of range! Please try again! Available range: (' + str(0 - len(original_data)) + ' to ' + str(len(original_data) - 1) + ')')
+			print(error_index_range(original_data))
 
 		else:
 
@@ -1734,7 +1719,7 @@ def main_line_graph(universal_set):
 
 			except IndexError:
 
-				print('Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')')
+				print(error_index_range(universal_set))
 
 			else:
 
@@ -1768,7 +1753,7 @@ def main_line_graph(universal_set):
 
 			except IndexError:
 
-				print('Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')')
+				print(error_index_range(universal_set))
 
 			else:
 
@@ -1807,6 +1792,236 @@ def main_line_graph(universal_set):
 
 
 
+def stem_plot(universal_set):
+
+	print('Stem plot mode')
+
+	while True:
+
+		while True:
+
+			x_index = input('Please enter the index of x data: ')
+
+			try:
+
+				x_index = int(x_index)
+				x_data = universal_set[x_index]
+
+			except ValueError:
+
+				print('Invalid input: input is not a number!')
+
+			except IndexError:
+
+				print(error_index_range(universal_set))
+
+			else:
+
+				break
+
+		while True:
+
+			y_index = input('Please enter the index of y data: ')
+
+			try:
+
+				y_index = int(y_index)
+				y_data = universal_set[y_index]
+
+			except ValueError:
+
+				print('Invalid input: input is not a number!')
+
+			except IndexError:
+
+				print(error_index_range(universal_set))
+
+			else:
+
+				break
+
+		if len(x_data) != len(y_data):
+
+			print('Error: length of x and y is not equal!')
+
+		else:
+
+			break
+
+	plt.stem(x_data,y_data)
+
+	title = input('Please type in the title of the stem plot: ')
+
+	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
+
+	x_label = default_label(x_label, 'Observation')
+
+	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
+
+	y_label = default_label(y_label, 'Frequency')
+
+	plt.title(title)
+	plt.xlabel(x_label)
+	plt.ylabel(y_label)
+	plt.grid()
+
+
+	plt.show()
+
+	print('Succeed!')
+
+
+
+def histo_2d(universal_set):
+	print('2D Histogram mode')
+
+	while True:
+
+		while True:
+
+			x_index = input('Please enter the index of x data: ')
+
+			try:
+
+				x_index = int(x_index)
+				x_data = universal_set[x_index]
+
+			except ValueError:
+
+				print('Invalid input: input is not a number!')
+
+			except IndexError:
+
+				print(error_index_range(universal_set))
+
+			else:
+
+				break
+
+		while True:
+
+			y_index = input('Please enter the index of y data: ')
+
+			try:
+
+				y_index = int(y_index)
+				y_data = universal_set[y_index]
+
+			except ValueError:
+
+				print('Invalid input: input is not a number!')
+
+			except IndexError:
+
+				print(error_index_range(universal_set))
+
+			else:
+
+				break
+
+		if len(x_data) != len(y_data):
+
+			print('Error: length of x and y is not equal!')
+
+		else:
+
+			break
+
+	print('How many bins do you want, or enter nothing to enable default settings.')
+
+	while True:
+
+		bin_num_str = input()
+
+		if bin_num_str == '':
+			bin_num_str = str( int(1 + np.log10((len(x_data) + len(y_data)) / 2) / np.log10(2)))
+		try:
+			bin_number = int(bin_num_str)
+
+		except ValueError:
+			print('Invalid input, please try again! ')
+		else:
+			break
+
+	plt.hist2d(x_data, y_data, bins = bin_number)
+
+	title = input('Please type in the title of the histogram: ')
+
+	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
+
+	x_label = default_label(x_label, 'X-axis')
+
+	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
+
+	y_label = default_label(y_label, 'Y-axis')
+
+	plt.title(title)
+	plt.xlabel(x_label)
+	plt.ylabel(y_label)
+	plt.grid()
+
+	plt.show()
+
+	print('Succeed!')
+
+
+
+
+def stairs_plot(universal_set):
+
+	print('Stair plot mode')
+
+	while True:
+
+		y_index = input('Please enter the index of data: ')
+
+		try:
+
+			y_index = int(y_index)
+			y_data = universal_set[y_index]
+
+		except ValueError:
+
+			print('Invalid input: input is not a number!')
+
+		except IndexError:
+
+			print(error_index_range(universal_set))
+
+		else:
+
+			break
+
+
+	plt.stairs(y_data)
+
+	title = input('Please type in the title of the stairs plot: ')
+
+	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
+
+	x_label = default_label(x_label, 'Observation')
+
+	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
+
+	y_label = default_label(y_label, 'Frequency')
+
+	plt.title(title)
+	plt.xlabel(x_label)
+	plt.ylabel(y_label)
+	plt.grid()
+
+	plt.show()
+
+	print('Succeed!')
+
+
+
+
+def error_index_range(universal_set):
+
+	return 'Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')'
+
+
 def main():
 
 
@@ -1827,102 +2042,117 @@ def main():
 
 
 
-		print('Do you want: \nCalculate parameters(P)\nBivariate Chart: a Scatter plot(S), a Multi-data histogram(M), a Box-plot(B), a Line graph(L)\nUnivariate: Chart a Dot plot(D), a scatter plot(Frequency)(F), Histogram(H), a Cumulative relative frequency graph(C), or a density curve(DC)? \nOr you can enter "ADD" to add a dataset, "DATA" to view a dataset,"MOD" to modify dataset,"DEL" to delete a dataset or "SAV" to save a dataset.\nEnter "Prob" to enable probability simulator\nEnter "#" to exit.')
+		print('Do you want: \nCalculate parameters(P)\nBivariate Chart: a Scatter plot(SC), a Multi-data histogram(M), a Box-plot(B), a Line graph(L), a Stem plot(ST), a 2D-histogram(2DH)\nUni-variate: Chart a Dot plot(D), a scatter plot(Frequency)(F), Histogram(H), a Cumulative relative frequency graph(C), a density curve(DC) or a Stairs plot(STP)? \nOr you can enter "ADD" to add a dataset, "DATA" to view a dataset,"MOD" to modify dataset,"DEL" to delete a dataset or "SAV" to save a dataset.\nEnter "Prob" to enable probability simulator\nEnter "#" to exit.')
 
 		type_of_chart = input().upper()
 
 
-		if type_of_chart == 'H': #直方图
+		match type_of_chart:
 
-			main_single_histo_plotting(original_data)
+
+
+
+			case 'H': #直方图
+
+				main_single_histo_plotting(original_data)
 			
 
-		elif type_of_chart == 'S': #散点图
+			case 'SC': #散点图
 
-			scatter_plt(original_data)
-
-
-		elif type_of_chart == 'B': #箱线图
+				scatter_plt(original_data)
 
 
-			box_plotting(original_data)
-
-		elif type_of_chart == 'M': #多数据集直方图
-
-			multi_histo_plotting(original_data)
+			case 'B': #箱线图
 
 
-		elif type_of_chart == 'C': #堆积百分比图
+				box_plotting(original_data)
 
-			cum_rel_frequency_g(original_data)
+			case 'M': #多数据集直方图
 
-
-		elif type_of_chart == 'F': #频率散点图
-
-			fre_sct(original_data)
+				multi_histo_plotting(original_data)
 
 
-		elif type_of_chart == 'D': #点状图
+			case 'C': #堆积百分比图
 
-			dot(original_data)
-
-
-		elif type_of_chart == 'DC': #密度图
-
-			dst_plt(original_data)
+				cum_rel_frequency_g(original_data)
 
 
-		elif type_of_chart == 'SAV':
+			case 'F': #频率散点图
 
-			select_dataset(original_data)
-
-
-		elif type_of_chart == 'DATA':
-
-			view_data(original_data)
+				fre_sct(original_data)
 
 
-		elif type_of_chart == 'MOD':
+			case 'D': #点状图
 
-			original_data = change_data(original_data)
-
-
-		elif type_of_chart == 'DEL':
-
-			original_data = del_dataset(original_data)
+				dot(original_data)
 
 
-		elif type_of_chart == 'P':
+			case 'DC': #密度图
 
-			main_calc_para(original_data)
-
-
-		elif type_of_chart == 'ADD':
-
-			original_data = main_add_dataset(original_data)
-
-		elif type_of_chart == 'PROB':
-
-			original_data = main_prob(original_data)
+				dst_plt(original_data)
 
 
-		elif type_of_chart == 'L':
+			case 'SAV':
 
-			main_line_graph(original_data)
-
-
-		elif type_of_chart == '#': #触发退出
+				select_dataset(original_data)
 
 
+			case 'DATA':
+
+				view_data(original_data)
 
 
-			exit_func()
-		
+			case 'MOD':
+
+				original_data = change_data(original_data)
+
+
+			case 'DEL':
+
+				original_data = del_dataset(original_data)
+
+
+			case 'P':
+
+				main_calc_para(original_data)
+
+
+			case 'ADD':
+
+				original_data = main_add_dataset(original_data)
+
+			case 'PROB':
+
+				original_data = main_prob(original_data)
+
+
+			case 'L':
+
+				main_line_graph(original_data)
+
+			case 'ST':
+
+				stem_plot(original_data)
+
+			case 'STP':
+
+				stairs_plot(original_data)
+
+			case '2DH':
+
+				histo_2d(original_data)
 
 
 
-		else:
-			print('Invalid input, please try again.') #要用While True: 主要考量是防止输错参数直接退出
+			case '#': #触发退出
+
+
+				exit_func()
+
+
+			case _:
+				print('Invalid input, please try again.') #要用While True: 主要考量是防止输错参数直接退出
+
 
 
 
