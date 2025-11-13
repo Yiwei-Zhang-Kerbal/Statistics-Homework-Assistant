@@ -32,7 +32,7 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 
 
 
-	print('Statistic Homework Assistant Ver. 0.1.25.Alpha, Copyright © 2025 Zhang Yiwei')
+	print('Statistic Homework Assistant Ver. 0.1.26.Alpha, Copyright © 2025 Zhang Yiwei, based on python, numpy, scipy and matplotlib.')
 
 	time.sleep(0.5)
 
@@ -119,8 +119,8 @@ def input_func(): #该函数无输入参数，用于采集用户输入的数据�
 
 		while True:
 
-			print('Please enter values of a numerical variable, use space to split each value, enable random number generator to generate a dataset(R), load data(L), or enter # to exit: ')
-			input_string = input()
+			print('Please enter values of a numerical variable, use space to split each value, enable random number generator(R) or linear generator(LN) to generate a dataset, load data(LD), or enter # to exit: ')
+			input_string = input().upper()
 
 			if input_string == '#':
 
@@ -138,13 +138,13 @@ def input_func(): #该函数无输入参数，用于采集用户输入的数据�
 					return variable_list
 
 
-			elif input_string == 'R' or input_string == 'r':
+			elif input_string == 'R':
 
 
 
 				input_string = random_generator()
 
-			elif input_string == 'L' or input_string == 'l':
+			elif input_string == 'LD':
 
 
 				while True:
@@ -167,8 +167,13 @@ def input_func(): #该函数无输入参数，用于采集用户输入的数据�
 						break
 
 
+			elif input_string == 'LN':
 
-			valid_characters = '1234567890. -EeRrUuNnBbLl'
+				input_string = linear_lst()
+
+
+
+			valid_characters = '1234567890. -Ee'
 			if all(char in valid_characters for char in input_string) and input_string != '#':
 				input_string_list = input_string.split(' ')
 				try:
@@ -1411,22 +1416,22 @@ def change_data(universal_set):
 
 			break
 
-	universal_set[data_change_index] = dataset_input()
+	universal_set[data_change_index] = dataset_input(universal_set)
 	print('Succeed!')
 	return universal_set
 
 
 
-def dataset_input():
+def dataset_input(universal_set):
 	while True:
-		print('Please enter values of a numerical variable, use space to split each value, enable random number generator to generate a dataset(R), load data(L): ')
+		print('Please enter values of a numerical variable, use space to split each value, enable random number generator(R) or linear generator(LN) to generate a dataset, sort a dataset(S), load data(LD): ')
 		input_string = input().upper()
 
 		if input_string == 'R':
 
 			input_string = random_generator()
 
-		elif input_string == 'L':
+		elif input_string == 'LD':
 
 			while True:
 				file_path = list(input('Please enter the path of the file: '))
@@ -1446,7 +1451,17 @@ def dataset_input():
 				if not input_string == False:
 					break
 
-		valid_characters = '1234567890. -EeRrUuNnBbLl'
+
+		elif input_string == 'LN':
+
+			input_string = linear_lst()
+
+		elif input_string == 'S':
+
+			input_string = sort_data_input(universal_set)
+
+
+		valid_characters = '1234567890. -Ee'
 		if all(char in valid_characters for char in input_string):
 			input_string_list = input_string.split(' ')
 			try:
@@ -1514,7 +1529,7 @@ def main_calc_para(universal_data):
 
 def main_add_dataset(universal_data):
 
-	new_data = dataset_input()
+	new_data = dataset_input(universal_data)
 
 	universal_data.append(new_data)
 	print('Succeed')
@@ -1579,7 +1594,7 @@ def prob_coin(universal_data):
 
 def main_prob(universal_data):
 
-	type_prob = input('Which problem do you want to simulate: \nTossing coins(TC), Rolling dice(RD)\n').upper()
+	type_prob = input('Which problem do you want to simulate: \nTossing coins(TC), Rolling dice(RD), Birthday paradox(BP)\n').upper()
 
 	match type_prob:
 
@@ -1590,6 +1605,11 @@ def main_prob(universal_data):
 		case 'RD':
 
 			result_prob = prob_dice(universal_data)
+
+		case 'BP':
+
+			result_prob = prob_birthday(universal_data)
+
 
 		case _:
 
@@ -1707,7 +1727,7 @@ def main_line_graph(universal_set):
 
 					break
 
-			if x_index:
+			if x_index and x_index != 1:
 
 				x_data = None
 
@@ -1774,11 +1794,11 @@ def main_line_graph(universal_set):
 
 	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
 
-	x_label = default_label(x_label, 'Observation')
+	x_label = default_label(x_label, 'X-axis')
 
 	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
 
-	y_label = default_label(y_label, 'Frequency')
+	y_label = default_label(y_label, 'Y-axis')
 
 	plt.title(title)
 	plt.xlabel(x_label)
@@ -1854,11 +1874,11 @@ def stem_plot(universal_set):
 
 	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
 
-	x_label = default_label(x_label, 'Observation')
+	x_label = default_label(x_label, 'X-axis')
 
 	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
 
-	y_label = default_label(y_label, 'Frequency')
+	y_label = default_label(y_label, 'Y-axis')
 
 	plt.title(title)
 	plt.xlabel(x_label)
@@ -1959,7 +1979,7 @@ def histo_2d(universal_set):
 	plt.xlabel(x_label)
 	plt.ylabel(y_label)
 	plt.grid()
-
+	plt.colorbar()
 	plt.show()
 
 	print('Succeed!')
@@ -1999,11 +2019,11 @@ def stairs_plot(universal_set):
 
 	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
 
-	x_label = default_label(x_label, 'Observation')
+	x_label = default_label(x_label, 'X-axis')
 
 	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
 
-	y_label = default_label(y_label, 'Frequency')
+	y_label = default_label(y_label, 'Y-axis')
 
 	plt.title(title)
 	plt.xlabel(x_label)
@@ -2020,6 +2040,111 @@ def stairs_plot(universal_set):
 def error_index_range(universal_set):
 
 	return 'Index out of range! Please try again! Available range: (' + str(0 - len(universal_set)) + ' to ' + str(len(universal_set) - 1) + ')'
+
+
+def linear_lst():
+
+	start_val = ask_number('Please enter the start value: ', float_check=True)
+
+	end_val = ask_number('Please enter the end value: ', float_check=True)
+
+	step = ask_number('Please enter the number of items: ')
+
+	line_list = list(np.linspace(start=start_val, stop=end_val, num=step))
+
+	return_string = ''
+
+	for index_transfer in line_list:
+
+		return_string += (str(index_transfer) + ' ')
+
+	return_string = return_string[:-1]
+
+	return return_string
+
+def prob_birthday(universal_set):
+
+	print('Birthday paradox')
+
+	result_brh = []
+
+	while True:
+
+		times = prob_ask_times('add friend')
+
+		if not times:
+			return prob_result_out(result_brh, universal_set)
+
+		for index_day in range(times):
+			result_sig = random.randint(1, 365)
+			result_brh.append(result_sig)
+
+		check_same_day = {}
+
+		for index_check in range(1,366):
+
+			num_same_day = result_brh.count(index_check)
+
+			if num_same_day >= 2:
+
+				check_same_day[index_check] = num_same_day
+
+
+		if len(check_same_day) == 0:
+
+			print('No one has same birthday with others.')
+
+		else:
+
+
+			printing_string = ''
+
+			for index_print in check_same_day.keys():
+
+				printing_string += ' ' + str(check_same_day[index_print]) + ' of your friends have birthday at day ' + str(index_print) + ','
+
+			printing_string = printing_string[1:-1]
+
+
+			print(printing_string)
+
+			print('Here are the details: \n' +str(result_brh) + '\nNumber of your friends: ' + str(len(result_brh)))
+
+
+
+def sort_data_input(universal_set):
+
+
+
+	while True:
+		while True:
+			try:
+				data_sort_index = int(input('Please enter the dataset you want to sort: '))
+
+			except ValueError:
+				print('Invalid input!')
+
+			else:
+
+				break
+
+		if test_range(data_sort_index, len(universal_set), 0 - len(universal_set),error_index_range(universal_set), True, True):
+			break
+
+
+	new_data = universal_set[data_sort_index]
+
+	new_data.sort()
+
+
+	output_string = ''
+
+	for index_str in new_data:
+
+		output_string += str(index_str) + ' '
+
+	return output_string[:-1]
+
 
 
 def main():
