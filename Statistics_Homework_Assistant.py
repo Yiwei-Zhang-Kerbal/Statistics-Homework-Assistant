@@ -16,6 +16,11 @@ import time
 import random
 from scipy.stats import gaussian_kde
 import json
+from scipy.optimize import curve_fit
+import warnings
+
+warnings.filterwarnings('ignore')
+
 
 def ini_func():# 打印初始化动画和界面的函数，包含版本号等。等这个播放完按enter该函数结束运行。		无输入参数和返回值	注：该版本不适配Sublime Text和IDLE!
 	print('\033[1;32mLoading', end='')
@@ -32,7 +37,7 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 
 
 
-	print('Statistic Homework Assistant Ver. 0.1.26.Alpha, Copyright © 2025 Zhang Yiwei, based on python, numpy, scipy and matplotlib.')
+	print('Statistic Homework Assistant Ver. 0.1.27.Alpha, Copyright © 2025 Zhang Yiwei, based on python, numpy, scipy and matplotlib.')
 
 	time.sleep(0.5)
 
@@ -746,6 +751,7 @@ def dot(data): #点状图，输入参数为数据总集（两层嵌套列表，�
 
 	y_label = default_label(y_label, 'Frequency')
 
+
 	plt.title(title)
 	plt.xlabel(x_label)
 	plt.ylabel(y_label)
@@ -804,6 +810,7 @@ def fre_sct(data):  # 频率散点图，输入参数为数据总集（两层嵌�
 	plt.show()
 
 	print('Succeed!')
+
 
 def calc_density(data): #密度图，输入参数为数据集（列表，列表元素为浮点），返回值一个列表，两个元素(x值和y值)
 
@@ -882,25 +889,23 @@ def scatter_plt(data): #散点图，输入参数为数据总集（两层嵌套�
 	if reg_des:
 
 		while True:
-			type_des = input('Do you want a linear regression(L) or a polynomial regression(P)?\n').upper()
+			type_des = input('Do you want a linear regression(L), a polynomial regression(P) or other regressions(O)?\n').upper()
 
 			match type_des:
 
 				case 'L':
 
 					try:
-						result_reg = linear_reg(x_axis, y_axis)
+						linear_reg(x_axis, y_axis)
 
 						break
 
 					except ValueError:
 
-						result_reg = [0, 0, 0, 0]
-
 						break
 
 				case 'P':
-					result_reg = [0, 0, 0, 0]
+
 					try:
 
 						n = float(input('Please enter the degree of the regression(n in R): '))
@@ -915,15 +920,18 @@ def scatter_plt(data): #散点图，输入参数为数据总集（两层嵌套�
 
 					break
 
+				case 'O':
+
+
+					main_curve_reg(x_axis, y_axis)
+
+					break
+
 
 				case _:
 
 					print('Invalid input!')
-	else:
 
-		result_reg = [0, 0, 0, 0]
-
-		type_des = None
 
 	title = input('Please type in the title of the graph: ')
 
@@ -941,12 +949,8 @@ def scatter_plt(data): #散点图，输入参数为数据总集（两层嵌套�
 
 
 	if reg_des:
+
 		plt.legend()
-
-		if type_des == 'L':
-
-			print('s=' + str(round(result_reg[2],3)))
-			print('r^2=' + str(round(result_reg[3],3)))
 
 
 	plt.grid()
@@ -1044,7 +1048,7 @@ def linear_reg(x_data,y_data): #线性拟合，输入为两个列表，元素为
 
 
 
-	plt.plot(np.array(x_data), np.array(x_data) * slope + intercept, color = 'red', label = str(round(slope,3)) + 'x + ' + str(round(intercept,3)))
+	plt.plot(np.array(x_data), np.array(x_data) * slope + intercept, color = 'red', label = 'y=' + str(round(slope,3)) + 'x + ' + str(round(intercept,3)))
 
 
 
@@ -1070,8 +1074,8 @@ def linear_reg(x_data,y_data): #线性拟合，输入为两个列表，元素为
 
 	r2 = 1 - (residual_all / y_y_bar)
 
-
-
+	print('s=' + str(round(s, 3)))
+	print('r^2=' + str(round(r2, 3)))
 
 
 	return [float(slope),float(intercept),s,r2]
@@ -1114,6 +1118,7 @@ def dst_plt(data):  #画密度曲线的函数，输入参数为数据总集，�
 	plt.show()
 
 	print('Succeed!')
+
 
 
 
@@ -1391,7 +1396,7 @@ def ploy_reg(x_data,y_data,n): #
 
 	plot_x = np.linspace(min(x_data),max(x_data),1000)
 
-	plt.plot(plot_x,poly(plot_x), color = 'red', label = 'Line of best fit')
+	plt.plot(plot_x, poly(plot_x), color = 'red', label = 'Curve of best fit')
 
 	print('Coefficients of regression function: \n' + str(coef))
 
@@ -2145,6 +2150,116 @@ def sort_data_input(universal_set):
 
 	return output_string[:-1]
 
+
+
+def exp_func(x, a, b, c):
+
+	return a * np.exp(b * x) + c
+
+
+def log_func(x, a, b, c):
+
+	return a * np.log(x * b) + c
+
+
+def trig_func(x, a, b, c, d):
+
+	return a * np.sin(b * x + c) + d
+
+
+def curve_reg(x, y, func):
+
+	if len(x) != len(y):
+
+		raise ValueError
+
+	else:
+
+		popt, pcov = curve_fit(func, x, y)
+
+	return popt, pcov
+
+
+
+
+def exp_reg(x,y):
+
+	popt, pcov = curve_reg(x, y, exp_func)
+
+	new_x = np.linspace(start=min(x), stop=max(x), num=1000)
+
+	reg_y = exp_func(new_x, popt[0], popt[1], popt[2])
+
+	popt = np.round(popt, decimals = 3)
+
+	plt.plot(new_x, reg_y, label='$y=' + str(popt[0]) + r'\mathrm{e}^{' + str(popt[1]) + 'x}+' + str(popt[2]) + '$', color = 'red')
+
+
+
+
+def log_reg(x,y):
+
+	popt, pcov = curve_reg(x, y, log_func)
+
+	new_x = np.linspace(start=min(x), stop=max(x), num=1000)
+
+	reg_y = log_func(new_x, popt[0], popt[1], popt[2])
+
+	popt = np.round(popt, decimals = 3)
+
+	plt.plot(new_x, reg_y, label='$y=' + str(popt[0]) + r'\ln' + str(popt[1]) + 'x+' + str(popt[2]) + '$', color = 'red')
+
+
+
+
+def trig_reg(x,y):
+
+	popt, pcov = curve_reg(x, y, trig_func)
+
+	new_x = np.linspace(start=min(x), stop=max(x), num=1000)
+
+	reg_y = trig_func(new_x, popt[0], popt[1], popt[2], popt[3])
+
+	popt = np.round(popt, decimals=3)
+
+	plt.plot(new_x, reg_y, label='$y=' + str(popt[0]) + r'\sin(' + str(popt[1]) + 'x+' + str(popt[2]) + ')+' + str(popt[3]) + '$', color='red')
+
+
+
+
+def main_curve_reg(x, y):
+
+	x = np.array(x)
+
+	y = np.array(y)
+
+	while True:
+
+		type_reg = input('Please enter the type of regression: Exponential(E), Logarithm(L) or Trigonometric(T): ').upper()
+
+		match type_reg:
+
+			case 'E':
+
+				exp_reg(x,y)
+
+				break
+
+			case 'L':
+
+				log_reg(x,y)
+
+				break
+
+			case 'T':
+
+				trig_reg(x,y)
+
+				break
+
+			case _:
+
+				print('Invalid input!')
 
 
 def main():
