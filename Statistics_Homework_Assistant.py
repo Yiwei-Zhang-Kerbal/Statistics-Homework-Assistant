@@ -37,7 +37,7 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 
 
 
-	print('Statistic Homework Assistant Ver. 0.1.27.Alpha, Copyright © 2025 Zhang Yiwei, based on python, numpy, scipy and matplotlib.')
+	print('Statistic Homework Assistant Ver. 0.1.28.Alpha, Copyright © 2025 Zhang Yiwei, based on python, numpy, scipy and matplotlib.')
 
 	time.sleep(0.5)
 
@@ -46,13 +46,13 @@ def ini_func():# 打印初始化动画和界面的函数，包含版本号等。
 	time.sleep(0.25)
 	print('    / ____/   /__   __/   / __ |    /__   __/   /___/   / ____/   /__   __/   /___/   /  _____/   / ____/')
 	time.sleep(0.25)
-	print('   / /___       /  /     / /_| |      /  /     ____    / /___      /  /      ____    /  /        / /___')
+	print('   / /___       /  /     / /_| |      /  /     ____    / /___      /  /      ____    /  /        / /___  ')
 	time.sleep(0.25)
-	print('  /____ /      /  /     / ____ |     /  /     /   /   /____ /     /  /      /   /   /  /        /____ /')
+	print('  /____ /      /  /     / ____ |     /  /     /   /   /____ /     /  /      /   /   /  /        /____ /  ')
 	time.sleep(0.25)
-	print('  ___/ /      /  /     / /   | |    /  /     /   /    ___/ /     /  /      /   /   /  /_____    ___/ /')
+	print('  ___/ /      /  /     / /   | |    /  /     /   /    ___/ /     /  /      /   /   /  /_____    ___/ /   ')
 	time.sleep(0.25)
-	print('/_____/      /__/     /_/    |_|   /__/     /___/   /_____/     /__/      /___/   /________/  /_____/ ')
+	print('/_____/      /__/     /_/    |_|   /__/     /___/   /_____/     /__/      /___/   /________/  /_____/    ')
 	time.sleep(0.25)
 	print('Press Enter to start: \033[0m')
 
@@ -272,16 +272,12 @@ def histo_plotting(data): #生成直方图的函数，输入参数为一个元�
 
 
 
-def box_plotting(data): #生成箱线图的函数，输入参数为一个元素为列表的列表，二级列表的元素是浮点型，为总的数据集，无返回值
-	print('Boxplot mode')
-
+def box_vio_input(data):
 	data_needed = []
 
 	data_index = []
 
 	data_label_input = ''
-
-
 
 	data_group_label = []
 
@@ -291,19 +287,11 @@ def box_plotting(data): #生成箱线图的函数，输入参数为一个元素�
 
 			data_index_working = ask_number_with_exit('Which data set would you like to plot, or enter # to finish?')
 
-			
-
 			if data_index_working == '#':
-
 				break
-
-			
-
-
 
 			if data_index_working >= len(data) or data_index_working < (0 - len(data)):
 				print(error_index_range(data))
-
 			else:
 
 				print('Please enter a label for this group: ')
@@ -313,43 +301,55 @@ def box_plotting(data): #生成箱线图的函数，输入参数为一个元素�
 				break
 
 		if data_index_working == '#':
-
 			break
 
 		data_index.append(data_index_working)
 		data_group_label.append(data_label_input)
 
-	vert_idx = ask_func('Vertical (v) or horizontal(h) box?','v','V','h','H')
-
-	mean_display = ask_func('Do you want do display mean in this plot? (y/n)','y','Y','n','N')
-
 	for i in data_index:
 
 		data_needed.append(data[i])
 
+	return data_needed, data_group_label
+
+def box_plotting(data): #生成箱线图的函数，输入参数为一个元素为列表的列表，二级列表的元素是浮点型，为总的数据集，无返回值
+	print('Boxplot mode')
+
+	data_needed, data_group_label = box_vio_input(data)
+
+	vert_idx = ask_func('Vertical (v) or horizontal(h) box?','v','V','h','H')
+
+	mean_display = ask_func('Do you want do display mean in this plot? (y/n)','y','Y','n','N')
 
 
-
-
-
-	plt.grid(True)
 	plt.boxplot(data_needed, patch_artist = True, showmeans = mean_display, meanline = True, vert = vert_idx, tick_labels = data_group_label)
 
 	title = input('Please type in the title of the box plot: ')
 
 	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
 
-	x_label = default_label(x_label, 'Observation')
-
 	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
 
-	y_label = default_label(y_label, 'Distribution')
+
+	if vert_idx:
+
+		y_label = default_label(x_label, 'Observation')
+
+		x_label = default_label(y_label, 'Distribution')
+
+
+	else:
+
+		x_label = default_label(x_label, 'Observation')
+
+		y_label = default_label(y_label, 'Distribution')
 
 
 
 	plt.title(title)
 	plt.xlabel(x_label)
 	plt.ylabel(y_label)
+	plt.grid()
 
 	plt.show()
 
@@ -1717,7 +1717,7 @@ def main_line_graph(universal_set):
 				x_index = input('Please enter the index of independent dataset, or enter "#" to exit: ')
 
 				if x_index == '#':
-					x_index = True
+
 
 					break
 
@@ -1732,7 +1732,7 @@ def main_line_graph(universal_set):
 
 					break
 
-			if x_index and x_index != 1:
+			if x_index == '#':
 
 				x_data = None
 
@@ -1750,7 +1750,7 @@ def main_line_graph(universal_set):
 
 				break
 
-		if x_index:
+		if x_index == '#':
 
 			break
 
@@ -2262,6 +2262,51 @@ def main_curve_reg(x, y):
 				print('Invalid input!')
 
 
+def violin_plot(universal_set):
+
+	print('Violin plot mode')
+
+
+	data_needed, labels = box_vio_input(universal_set)
+
+	vert_idx = ask_func('Vertical (v) or horizontal(h) box?', 'v', 'V', 'h', 'H')
+
+	mean_display = ask_func('Do you want do display mean in this plot? (y/n)', 'y', 'Y', 'n', 'N')
+
+	med_display = ask_func('Do you want do display median in this plot? (y/n)', 'y', 'Y', 'n', 'N')
+
+	plt.violinplot(data_needed, showmedians=med_display, showmeans=mean_display, vert=vert_idx)
+
+	title = input('Please type in the title of the violin plot: ')
+
+	x_label = input('Please type in the label of x-axis(Enter nothing to enable default label): ')
+
+	y_label = input('Please type in the label of y-axis(Enter nothing to enable default label): ')
+
+	if vert_idx:
+
+		plt.xticks(range(1, len(data_needed) + 1), labels)
+
+		y_label = default_label(x_label, 'Observation')
+		x_label = default_label(y_label, 'Distribution')
+
+	else:
+
+		plt.yticks(range(1, len(data_needed) + 1), labels)
+
+		x_label = default_label(x_label, 'Observation')
+		y_label = default_label(y_label, 'Distribution')
+
+	plt.title(title)
+	plt.xlabel(x_label)
+	plt.ylabel(y_label)
+	plt.grid()
+
+	plt.show()
+
+	print('Succeed!')
+
+
 def main():
 
 
@@ -2282,7 +2327,7 @@ def main():
 
 
 
-		print('Do you want: \nCalculate parameters(P)\nBivariate Chart: a Scatter plot(SC), a Multi-data histogram(M), a Box-plot(B), a Line graph(L), a Stem plot(ST), a 2D-histogram(2DH)\nUni-variate: Chart a Dot plot(D), a scatter plot(Frequency)(F), Histogram(H), a Cumulative relative frequency graph(C), a density curve(DC) or a Stairs plot(STP)? \nOr you can enter "ADD" to add a dataset, "DATA" to view a dataset,"MOD" to modify dataset,"DEL" to delete a dataset or "SAV" to save a dataset.\nEnter "Prob" to enable probability simulator\nEnter "#" to exit.')
+		print('Do you want: \nCalculate parameters(P)\nBivariate Chart: a Scatter plot(SC), a Multi-data histogram(M), a Box-plot(B), a Violin plot(V), a Line graph(L), a Stem plot(ST), a 2D-histogram(2DH)\nUni-variate: Chart a Dot plot(D), a scatter plot(Frequency)(F), Histogram(H), a Cumulative relative frequency graph(C), a density curve(DC) or a Stairs plot(STP)? \nOr you can enter "ADD" to add a dataset, "DATA" to view a dataset,"MOD" to modify dataset,"DEL" to delete a dataset or "SAV" to save a dataset.\nEnter "Prob" to enable probability simulator\nEnter "#" to exit.')
 
 		type_of_chart = input().upper()
 
@@ -2382,6 +2427,10 @@ def main():
 
 				histo_2d(original_data)
 
+			case 'V':
+
+				violin_plot(original_data)
+
 
 
 			case '#': #触发退出
@@ -2391,6 +2440,7 @@ def main():
 
 
 			case _:
+
 				print('Invalid input, please try again.') #要用While True: 主要考量是防止输错参数直接退出
 
 
@@ -2402,4 +2452,4 @@ main()
 
 
 
-#数据可以在最后一行临时暂存：[]
+#数据可以在最后一行临时暂存：[]、
